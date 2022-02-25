@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS logs (
     log_id      SERIAL PRIMARY KEY,
     log_date    DATE,
     log_time    TIME,
-    log_value   DOUBLE PRECISION,
+    log_value   NUMERIC,
     log_flag    BOOLEAN
 );
 
