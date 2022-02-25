@@ -11,6 +11,11 @@ public class Meritev {  // razred za hranjenje posamezne meritve
         this.volumen = volumen;
     }
 
+    @Override
+    public String toString() {
+        return this.datumCas + ": " + this.volumen;
+    }
+
     public Date vrniDatum() {
         return this.datumCas;
     }
