@@ -26,11 +26,12 @@ public class PodatkiParser {
             System.err.printf("Napačen zapis datuma.%n");
         }
 
-        return new Meritev(d, 3f);
+        return new Meritev(d, volumen);
     }
 
     public static ArrayList<Meritev> vrniMeritveIzDatoteke(String filename) {
         BufferedReader bralnik;  // za branje podatkov iz datoteke
+        ArrayList<Meritev> meritve = new ArrayList<Meritev>();
 
         // odpre podano datoteko
         try {
@@ -39,6 +40,7 @@ public class PodatkiParser {
             String vrstica;
             while ((vrstica = bralnik.readLine()) != null) {  // vse do konca datoteke
                 Meritev m = preberiMeritev(vrstica);
+                meritve.add(m);
             }
             
         } catch (FileNotFoundException e) {
@@ -47,10 +49,6 @@ public class PodatkiParser {
             System.err.printf("Napaka pri branju datoteke %s.%n", filename);
         }
 
-        ArrayList<Meritev> meritve = new ArrayList<Meritev>();
-        meritve.add(new Meritev(new Date(), 3f));
-
-        System.out.printf("");
         return meritve;
     }
 
