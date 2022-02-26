@@ -40,6 +40,8 @@
             <script>
                 async function tabela() {
                     let meritve = await getGrouped();
+                    let porabe = [];
+                    let trend = null;
 
                     for (let i = 0; i < meritve.length - 1; i++) {
                         let volumen1 = meritve[i].round;
@@ -47,10 +49,8 @@
                         let dnevnaPoraba;
 
                         if (volumen1 >= volumen2) {
-                            meritve[i+1].narobe = false;
                             dnevnaPoraba = volumen1 - volumen2;
                         } else {
-                            meritve[i+1].narobe = true;
                             let date = new Date(meritve[i+1].log_date);  // meritve na dan polnjenja
                             let meritveNaDan = await getList(date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate());
                             //console.log(meritveNaDan);
@@ -60,18 +60,33 @@
                             }
 
                             // j označuje indeks zadnje meritve pred dobavo
-                            let delnaRazlika1 = volumen1 - meritveNaDan[j];  // poraba od prejšnjega dneva do tik pred polnitvijo
-                            let delnaRazlika2 = meritveNaDan[j+1] - meritveNaDan[meritveNaDan.length - 1];  // poraa od polnitve do polnoči naslednjega dne
+                            let delnaRazlika1 = volumen1 - meritveNaDan[j].log_value;  // poraba od prejšnjega dneva do tik pred polnitvijo
+                            let delnaRazlika2 = meritveNaDan[j+1].log_value - meritveNaDan[meritveNaDan.length - 1].log_value;  // poraa od polnitve do polnoči naslednjega dne
 
                             dnevnaPoraba = delnaRazlika1 + delnaRazlika2;
+
+                            if (trend != null && dnevnaPoraba < 7 * trend) {
+                                meritve[i].opozorilo = true;  // ostalo je še za manj kot 7 dni
+                                console.log(trend, dnevnaPoraba);
+                            }   
                         }
 
-                        meritve[i].dnevnaPoraba = dnevnaPoraba;
+                        meritve[i].dnevnaPoraba = Math.round(dnevnaPoraba * 1000, 2);
+
+                        let trendLo = Math.max(0, i - 7);
+                        let trendHi = i;
+                        trend = 0;
+                        for (let j = trendLo; j < trendHi; j++) {
+                            trend += meritve[j].dnevnaPoraba;
+                        }
+                        trend = Math.round((trend / (trendHi - trendLo + 1)) * 100) / 100;
                     }
 
                     //console.log(meritve);
                     for (let i = 0; i < meritve.length; i++) {
                         let meritev = meritve[i];
+                        meritev.sus = false;  // sumljiva dnevna poraba
+                        meritev.opozorilo = false;  // ali je na zalogi samo še za 7 dni olja ali porabljamo preveč
                         let datumCas = new Date(meritev.log_date);
 
                         /* let ure = datumCas.getHours();
@@ -82,15 +97,22 @@
                         let datumCasString = datumCas.getDate() + "." + (datumCas.getMonth() + 1) + "." + datumCas.getFullYear();
 
                         let tr = document.createElement("tr");
-                        if (meritev.narobe) {
-                            tr.style.background = "#ffd0d0";
-                        }
                         let td1 = document.createElement("td");
                         let td2 = document.createElement("td");
+                        let td3 = document.createElement("td");
                         td1.innerHTML = datumCasString;
                         td2.innerHTML = meritev.round;
+                        td3.innerHTML = meritev.dnevnaPoraba;
+                        if (meritev.dnevnaPoraba <= 0) {  // negativna poraba je sumljiva
+                            meritev.sus = true;
+                            td3.style.background = "#ffd0d0";
+                        }
+                        if (meritev.dnevnaPoraba * 1000 > 400) {  // dnevna poraba je večja od 400 litrov, opozori
+                            meritev.opozorilo = true;
+                        }
                         tr.appendChild(td1);
                         tr.appendChild(td2);
+                        tr.appendChild(td3);
                         document.getElementById("podatki").appendChild(tr);
                     }
                 }
