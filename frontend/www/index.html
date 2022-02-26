@@ -108,7 +108,7 @@
                             meritev.sus = true;
                             td3.style.background = "#ffd0d0";
                         }
-                        if (meritev.dnevnaPoraba * 1000 > 400) {  // dnevna poraba je večja od 400 litrov, opozori
+                        if (meritev.dnevnaPoraba > 400) {  // dnevna poraba je večja od 400 litrov, opozori
                             meritev.opozorilo = true;
                             dodajOpozorilo(meritve[i]);
                         }
@@ -123,7 +123,7 @@
                 function dodajOpozorilo(meritev, zaradiTrenda) {
                     let date = new Date(meritev.log_date); 
                     let datumCas = date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear();
-                    let s = (zaradiTrenda) ? "Na dan " + datumCas + " je ostalo za manj kot 7 dni olja." : "Na dan " + datumCas + " je poraba presegla 400 litrov (" + meritev.round * 1000 + " litrov).";
+                    let s = (zaradiTrenda) ? "Na dan " + datumCas + " je ostalo za manj kot 7 dni olja." : "Na dan " + datumCas + " je poraba presegla 400 litrov (" + Math.round(meritev.dnevnaPoraba) + " litrov).";
                     document.body.innerHTML = "<div class='alert alert-warning'>" + s + "</div>" + document.body.innerHTML;
                 }
                 
