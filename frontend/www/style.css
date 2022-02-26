@@ -12,6 +12,11 @@ h1, h2, h3 {
     margin: 0;
 }
 
+td {
+    border: 1px solid black;
+    padding: 2px;
+}
+
 #container {
     background-color: white;
     width: 800px;
