@@ -1,6 +1,7 @@
 <html>
     <head>
         <title>Hackaton BEST 2022</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
         <link rel="stylesheet" type="text/css" href="style.css"/>
     </head>
 
@@ -14,20 +15,58 @@
                 <div id="nav">
                     <h4>Navigation</h4>
                     <ul>
-                        <li><a class="selected" href=""></a> Nekaj prvega</li>
+                        <li><a class="selected" href=""></a> Baza</li>
                         <li><a href=""></a>Nekaj drugega</li>
                         <li><a href=""></a>Nekaj tretjega</li>
                     </ul>
                 </div>
                 <div id="main">
-                    <h2>Home page</h2>
-                    <p> bla bla bla</p>
+                    <h2>Baza</h2>
+                    <p>Zbrani podatki:</p>
+                    <table id="podatki">
+                        <tr>
+                            <th>Datum</th>
+                            <th>Volumen</th>
+                        </tr>
+                    </table>
                 </div>
             </div>
 
             <div id="footer">
                 Copyright &copy; 2022 Amra & boiz
             </div>
+
+            <script src="comms.js"></script>
+            <script>
+                async function tabela() {
+                    let meritve = await getGrouped();
+                    console.log(meritve);
+                    for (let i = 0; i < meritve.length; i++) {
+                        let meritev = meritve[i];
+                        let datumCas = new Date(meritev.log_date);
+
+                        /* let ure = datumCas.getHours();
+                        if (ure < 10) ure = "0" + ure;
+                        let minute = datumCas.getMinutes();
+                        if (minute < 10) minute = "0" + minute; */
+
+                        let datumCasString = datumCas.getDate() + "." + (datumCas.getMonth() + 1) + "." + datumCas.getFullYear();
+
+                        let tr = document.createElement("tr");
+                        let td1 = document.createElement("td");
+                        let td2 = document.createElement("td");
+                        td1.innerHTML = datumCasString;
+                        td2.innerHTML = meritev.round;
+                        tr.appendChild(td1);
+                        tr.appendChild(td2);
+                        document.getElementById("podatki").appendChild(tr);
+                    }
+                }
+                tabela();
+
+                let dan = "2021-12-31";  // zadnji dan meritev
+                
+            </script>
         </div>
     </body> 
 </html>

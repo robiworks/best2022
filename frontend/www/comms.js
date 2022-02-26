@@ -17,7 +17,7 @@ console.log("dkfghsfnkl");
 
 // gets all measurements, grouped and ordered by date
 async function getGrouped() {
-    let res = fetch(URL + "/api/grouped", {
+    let res = await fetch(URL + "/api/grouped", {
         method: "GET",
         mode: "cors",
         headers: {
@@ -25,7 +25,7 @@ async function getGrouped() {
         }
     });
 
-    let d = await (await res).json();
+    let d = await res.json();
     return d;
 }
 
@@ -40,5 +40,5 @@ async function addMeasurement(date, time, value) {
     });
 
     let d = await (await res).json();
-    return d;
+    return d
 }
