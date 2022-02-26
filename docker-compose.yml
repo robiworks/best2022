@@ -7,8 +7,8 @@ services:
       - "80:80"
     container_name: frontend
     restart: always
-    #volumes:
-    #  - ./frontend/www:/usr/local/apache2/htdocs/
+    volumes:
+      - ./frontend/www:/usr/local/apache2/htdocs/
   
   backend:
     build: ./backend
