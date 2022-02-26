@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  frontend:
+    build: ./frontend
+    ports:
+      - "80:80"
+    container_name: frontend
+    restart: always
+    #volumes:
+    #  - ./frontend/www:/usr/local/apache2/htdocs/
+  
+  backend:
+    build: ./backend
+    ports:
+      - "5000:5000"
+    container_name: backend
+    restart: always
+    links:
+      - database
+  
+  database:
+    build: ./database
+    container_name: database
+    restart: always

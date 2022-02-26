@@ -9,7 +9,7 @@ app.use(bodyParser.json());
 // connect to the database - robi dej zrihti no
 const pool = new pg.Pool({
     user: 'aquasystems',
-    host: 'localhost',
+    host: 'database',
     database: 'aquasystems',
     password: 'maribor',
     port: 5432,
@@ -124,4 +124,9 @@ app.put("/api/add", (req, res) => {
 
 app.get("/", (req, res) => {
     res.send("<h1>h API</h1>");
+});
+
+// start the app
+app.listen(port, () => {
+    console.log(`Listening on port ${port}`);
 });
