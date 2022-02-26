@@ -59,6 +59,8 @@
                         } else {
                             let date = new Date(meritve[i+1].log_date);  // meritve na dan polnjenja
                             let meritveNaDan = await getList(date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate());
+                            date.setDate(date.getDate() + 1);  // en dan kasneje
+                            let meritveNaNaslednjiDan = await getList(date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate());
                             //console.log(meritveNaDan);
                             let j = 0;  // indeks trenutne meritve
                             while (meritveNaDan[j].log_value > meritveNaDan[j + 1].log_value) {  // ok
@@ -67,14 +69,14 @@
 
                             // j označuje indeks zadnje meritve pred dobavo
                             let delnaRazlika1 = volumen1 - meritveNaDan[j].log_value;  // poraba od prejšnjega dneva do tik pred polnitvijo
-                            let delnaRazlika2 = meritveNaDan[j+1].log_value - meritveNaDan[meritveNaDan.length - 1].log_value;  // poraa od polnitve do polnoči naslednjega dne
+                            let delnaRazlika2 = meritveNaDan[j+1].log_value - meritveNaNaslednjiDan[0].log_value;  // poraa od polnitve do polnoči naslednjega dne
 
                             dnevnaPoraba = delnaRazlika1 + delnaRazlika2;
 
                             if (trend != null && meritveNaDan[j].log_value + 1000 < 7 * trend) {
                                 meritve[i].opozorilo = true;  // ostalo je še za manj kot 7 dni
                                 dodajOpozorilo(meritve[i], true);
-                                console.log(trend, dnevnaPoraba);
+                                //console.log(trend, dnevnaPoraba);
                             }   
                         }
 
@@ -85,7 +87,7 @@
                         let trendHi = i;
                         trend = 0;
                         for (let j = trendLo; j < trendHi; j++) {
-                            trend += meritve[j].nepopravljenaDnevnaPoraba;
+                            trend += meritve[j].dnevnaPoraba;
                         }
                         trend = Math.round((trend / (trendHi - trendLo + 1)) * 100) / 100;
                     }
