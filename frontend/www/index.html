@@ -65,8 +65,9 @@
 
                             dnevnaPoraba = delnaRazlika1 + delnaRazlika2;
 
-                            if (trend != null && dnevnaPoraba < 7 * trend) {
+                            if (trend != null && meritveNaDan[j].log_value + 1000 < 7 * trend) {
                                 meritve[i].opozorilo = true;  // ostalo je še za manj kot 7 dni
+                                dodajOpozorilo(meritve[i], true);
                                 console.log(trend, dnevnaPoraba);
                             }   
                         }
@@ -109,6 +110,7 @@
                         }
                         if (meritev.dnevnaPoraba * 1000 > 400) {  // dnevna poraba je večja od 400 litrov, opozori
                             meritev.opozorilo = true;
+                            dodajOpozorilo(meritve[i]);
                         }
                         tr.appendChild(td1);
                         tr.appendChild(td2);
@@ -118,7 +120,12 @@
                 }
                 tabela();
 
-                let dan = "2021-12-31";  // zadnji dan meritev
+                function dodajOpozorilo(meritev, zaradiTrenda) {
+                    let date = new Date(meritev.log_date); 
+                    let datumCas = date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear();
+                    let s = (zaradiTrenda) ? "Na dan " + datumCas + " je ostalo za manj kot 7 dni olja." : "Na dan " + datumCas + " je poraba presegla 400 litrov (" + meritev.round * 1000 + " litrov).";
+                    document.body.innerHTML = "<div class='alert alert-warning'>" + s + "</div>" + document.body.innerHTML;
+                }
                 
             </script>
         </div>
