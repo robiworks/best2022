@@ -17,6 +17,11 @@ td {
     padding: 2px;
 }
 
+th {
+    padding: 5px;
+    text-align: center;
+}
+
 #container {
     background-color: white;
     width: 800px;
