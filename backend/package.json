@@ -5,8 +5,9 @@
     "private": true,
     "main": "index.js",
     "dependencies": {
-        "express": "latest",
         "body-parser": "latest",
+        "cors": "^2.8.5",
+        "express": "latest",
         "pg": "latest"
     }
 }
