@@ -40,7 +40,36 @@
             <script>
                 async function tabela() {
                     let meritve = await getGrouped();
-                    console.log(meritve);
+
+                    for (let i = 0; i < meritve.length - 1; i++) {
+                        let volumen1 = meritve[i].round;
+                        let volumen2 = meritve[i+1].round;
+                        let dnevnaPoraba;
+
+                        if (volumen1 >= volumen2) {
+                            meritve[i+1].narobe = false;
+                            dnevnaPoraba = volumen1 - volumen2;
+                        } else {
+                            meritve[i+1].narobe = true;
+                            let date = new Date(meritve[i+1].log_date);  // meritve na dan polnjenja
+                            let meritveNaDan = await getList(date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate());
+                            //console.log(meritveNaDan);
+                            let j = 0;  // indeks trenutne meritve
+                            while (meritveNaDan[j].log_value > meritveNaDan[j + 1].log_value) {  // ok
+                                j++;
+                            }
+
+                            // j označuje indeks zadnje meritve pred dobavo
+                            let delnaRazlika1 = volumen1 - meritveNaDan[j];  // poraba od prejšnjega dneva do tik pred polnitvijo
+                            let delnaRazlika2 = meritveNaDan[j+1] - meritveNaDan[meritveNaDan.length - 1];  // poraa od polnitve do polnoči naslednjega dne
+
+                            dnevnaPoraba = delnaRazlika1 + delnaRazlika2;
+                        }
+
+                        meritve[i].dnevnaPoraba = dnevnaPoraba;
+                    }
+
+                    //console.log(meritve);
                     for (let i = 0; i < meritve.length; i++) {
                         let meritev = meritve[i];
                         let datumCas = new Date(meritev.log_date);
@@ -53,6 +82,9 @@
                         let datumCasString = datumCas.getDate() + "." + (datumCas.getMonth() + 1) + "." + datumCas.getFullYear();
 
                         let tr = document.createElement("tr");
+                        if (meritev.narobe) {
+                            tr.style.background = "#ffd0d0";
+                        }
                         let td1 = document.createElement("td");
                         let td2 = document.createElement("td");
                         td1.innerHTML = datumCasString;
