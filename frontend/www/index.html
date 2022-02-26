@@ -113,8 +113,8 @@
                         let td4 = document.createElement("td");
                         td1.innerHTML = datumCasString;
                         td2.innerHTML = meritev.round;
-                        td3.innerHTML = meritev.nepopravljenaDnevnaPoraba;
-                        td4.innerHTML = meritev.dnevnaPoraba;
+                        td3.innerHTML = (meritev.nepopravljenaDnevnaPoraba == undefined) ? "-" : meritev.nepopravljenaDnevnaPoraba;
+                        td4.innerHTML = (meritev.dnevnaPoraba == undefined) ? "-" : meritev.dnevnaPoraba;
                         if (meritev.nepopravljenaDnevnaPoraba < 0) {  // negativna poraba je sumljiva
                             meritev.sus = true;
                             td3.style.background = "#ffd0d0";
