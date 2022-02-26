@@ -1,25 +1,44 @@
 const URL = "http://localhost:8080";
 
 // gets every measurement on the specified date
-const getList = (date) => {
-    fetch(URL + "/api/list?date=" + date, {
+async function getList(date) {
+    let res = fetch(URL + "/api/list?date=" + date, {
         method: "GET",
-        mode: "cors"
-    }).then((res) => console.log(res));
+        mode: "cors",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
+    
+    let d = await (await res).json();
+    return d;
 }
+console.log("dkfghsfnkl");
 
 // gets all measurements, grouped and ordered by date
-const getGrouped = () => {
-    fetch(URL + "/api/grouped", {
+async function getGrouped() {
+    let res = fetch(URL + "/api/grouped", {
         method: "GET",
-        mode: "cors"
-    }).then((res) => console.log(res));
+        mode: "cors",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
+
+    let d = await (await res).json();
+    return d;
 }
 
 // adds a measurement into the database
-const addMeasurement = (date, time, value) => {
-    fetch(URL + "/api/add?date=" + date + "&time=" + time + "&value=" + value, {
-        method: "GET",
-        mode: "cors"
-    }).then((res) => console.log(res));
+async function addMeasurement(date, time, value) {
+    let res = fetch(URL + "/api/add?date=" + date + "&time=" + time + "&value=" + value, {
+        method: "PUT",
+        mode: "cors",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
+
+    let d = await (await res).json();
+    return d;
 }
