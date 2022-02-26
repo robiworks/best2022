@@ -115,7 +115,7 @@
                         td2.innerHTML = meritev.round;
                         td3.innerHTML = meritev.nepopravljenaDnevnaPoraba;
                         td4.innerHTML = meritev.dnevnaPoraba;
-                        if (meritev.nepopravljenaDnevnaPoraba <= 0) {  // negativna poraba je sumljiva
+                        if (meritev.nepopravljenaDnevnaPoraba < 0) {  // negativna poraba je sumljiva
                             meritev.sus = true;
                             td3.style.background = "#ffd0d0";
                             td4.style.background = "#d0ffd0";
