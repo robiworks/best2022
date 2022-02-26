@@ -1,0 +1,13 @@
+{
+    "name": "Best2022Backend",
+    "version": "0.0.1",
+    "description": "HahaCool!",
+    "private": true,
+    "main": "index.js",
+    "dependencies": {
+        "body-parser": "latest",
+        "cors": "^2.8.5",
+        "express": "latest",
+        "pg": "latest"
+    }
+}
